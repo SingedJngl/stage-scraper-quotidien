@@ -1,0 +1,125 @@
+# Configuration du pipeline. Tout ce qui se règle sans toucher au code est ici.
+
+recherche:
+  # Une entrée = une requête par source. Garder la liste courte : chaque entrée
+  # consomme du quota Adzuna. Les mots-clés sont volontairement sans accents,
+  # les APIs y sont moins sensibles. Une source peut surcharger cette liste
+  # avec son propre `mots_cles` (voir france_travail) quand sa syntaxe diffère.
+  mots_cles:
+    - "stage systemes embarques"
+    - "stage electronique"
+    - "stage drone"
+    - "stage FPGA VHDL"
+    - "stage robotique"
+  # Fenetre de publication analysee a chaque run (surchargeable par --since-days).
+  publiee_depuis_jours: 1
+
+filtrage:
+  # Stage de mise en situation technique : 16 semaines minimum.
+  duree_min_semaines: 16
+  # Une offre dont la duree n'est indiquee nulle part est conservee (marquee "?"
+  # dans la feuille) : une bonne offre ne doit pas sauter a cause d'une
+  # description mal remplie.
+  garder_duree_inconnue: true
+  # Score de pertinence minimal pour etre retenue (voir poids plus bas).
+  score_min: 3
+  # Une offre doit se présenter comme un stage. Sans ce garde-fou, le moteur
+  # d'Adzuna — qui classe par pertinence et non par ET — fait passer des postes
+  # d'ingénieur en CDI qui franchissent tous les autres filtres.
+  exiger_marqueur_stage: true
+  # « PFE » et « fin d'études » ne sont volontairement PAS dans la liste : le
+  # stage visé est un stage ING4, pas un stage de fin d'études. De toute façon
+  # une annonce de PFE s'intitule « Stage de fin d'études », donc « stage » la
+  # capte déjà.
+  marqueurs_stage:
+    - stage
+    - stagiaire
+    - internship
+    - trainee
+  # Rejet si l'un de ces termes apparait dans l'INTITULE (mot entier, sans
+  # accents). Volontairement pas applique a la description : beaucoup d'offres
+  # de stage mentionnent l'alternance en bas de page.
+  exclusions:
+    - alternance
+    - alternant
+    - alternante
+    - apprentissage
+    - apprenti
+    - apprentie
+    - professionnalisation
+    - "contrat pro"
+    - "volontariat international"
+    - cdi
+    - freelance
+    - portage
+  # Poids applique quand le terme est trouve dans l'intitule.
+  # Dans la description, le poids compte pour moitie (arrondi au superieur).
+  mots_cles_scores:
+    embarque: 3
+    embarquee: 3
+    embarques: 3
+    firmware: 3
+    fpga: 3
+    vhdl: 3
+    verilog: 3
+    drone: 3
+    uav: 3
+    electronique: 3
+    microcontroleur: 3
+    stm32: 3
+    robotique: 2
+    "temps reel": 2
+    "carte electronique": 2
+    hardware: 2
+    capteur: 2
+    capteurs: 2
+    automatique: 2
+    mecatronique: 2
+    aeronautique: 2
+    "traitement du signal": 2
+    iot: 1
+    c++: 1
+    python: 1
+    altium: 1
+    kicad: 1
+    linux: 1
+
+france_travail:
+  actif: true
+  # Mots-clés propres à cette source : son paramètre motsCles traite une suite
+  # de mots comme une expression exacte (« stage electronique » ne renvoie
+  # rien), alors que la virgule fait un ET. Sans cette liste dédiée, la source
+  # est muette. Mesuré : France Travail ne publie quasiment aucun stage
+  # technique, ces requêtes servent de veille à coût nul (5 appels par run).
+  mots_cles:
+    - "stage,embarque"
+    - "stage,electronique"
+    - "stage,drone"
+    - "stage,fpga"
+    - "stage,robotique"
+  # Codes du referentiel France Travail. A CONFIRMER une fois pour toutes avec
+  # `python scripts/discover_referentiels.py`, puis reporter ici.
+  # Laisser vide ("") desactive le filtre correspondant cote API : le tri se
+  # fait alors uniquement dans filters.py, ce qui est le defaut le plus sur.
+  type_contrat: ""
+  nature_contrat: ""
+  # Codes ROME a cibler (optionnel, affinage). Le script de decouverte liste les
+  # metiers et leurs codes. Vide = pas de filtre metier.
+  codes_rome: []
+  # Filtre de duree cote API (en mois). Desactive par defaut : il ecarte aussi
+  # toutes les offres qui ne renseignent pas leur duree.
+  filtre_duree_api: false
+  resultats_par_page: 150
+  max_pages: 3
+
+adzuna:
+  actif: true
+  pays: fr
+  resultats_par_page: 50
+  max_pages: 2
+  # Adzuna raisonne en jours entiers ; on prend une marge d'un jour.
+  max_jours: 2
+
+sortie:
+  onglet_offres: "Offres"
+  onglet_runs: "Runs"
