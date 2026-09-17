@@ -1,0 +1,33 @@
+{
+  "resultats": [
+    {
+      "id": "187TYVM",
+      "intitule": "Stage - Ingénieur systèmes embarqués drone (H/F)",
+      "description": "Au sein de notre équipe R&D, vous participerez au développement du firmware d'un drone de livraison (STM32, C++, capteurs). Stage de 6 mois à pourvoir en février.",
+      "dateCreation": "2026-09-14T09:12:34.000Z",
+      "dateActualisation": "2026-09-14T09:12:34.000Z",
+      "lieuTravail": { "libelle": "91 - PALAISEAU", "commune": "91477" },
+      "entreprise": { "nom": "ACME DRONES" },
+      "typeContrat": "CDD",
+      "typeContratLibelle": "CDD - 6 Mois",
+      "natureContrat": "Contrat travail",
+      "origineOffre": {
+        "origine": "1",
+        "urlOrigine": "https://candidat.francetravail.fr/offres/recherche/detail/187TYVM"
+      }
+    },
+    {
+      "id": "187ZZZZ",
+      "intitule": "Stage électronique analogique",
+      "description": "Conception de cartes électroniques, Altium.",
+      "dateCreation": "2026-09-13T11:00:00.000Z",
+      "lieuTravail": { "libelle": "31 - TOULOUSE" },
+      "typeContrat": "CDD",
+      "typeContratLibelle": "CDD - 3 Mois"
+    },
+    {
+      "intitule": "Offre sans identifiant, a ignorer",
+      "description": "..."
+    }
+  ]
+}

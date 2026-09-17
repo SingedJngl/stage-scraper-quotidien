@@ -1,0 +1,63 @@
+name: Collecte quotidienne des offres de stage
+
+on:
+  schedule:
+    # 06:00 UTC du lundi au vendredi, soit 08:00 a Paris en ete et 07:00 en
+    # hiver (le cron GitHub ne connait que UTC).
+    - cron: "0 6 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      since_days:
+        description: "Fenetre de publication en jours (rattrapage)"
+        required: false
+        default: "1"
+      dry_run:
+        description: "Ne rien ecrire dans la feuille"
+        type: boolean
+        required: false
+        default: false
+
+# Le job ne fait que lire le depot : aucun droit d'ecriture necessaire.
+permissions:
+  contents: read
+
+jobs:
+  collecte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Installer les dependances
+        run: pip install -r requirements.txt
+
+      - name: Collecter les offres
+        env:
+          FT_CLIENT_ID: ${{ secrets.FT_CLIENT_ID }}
+          FT_CLIENT_SECRET: ${{ secrets.FT_CLIENT_SECRET }}
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+        # shell: bash active pipefail : sans lui, le code de sortie serait
+        # celui de `tee` et un run en echec passerait pour un succes.
+        shell: bash
+        run: |
+          python -m stages \
+            --since-days "${{ github.event.inputs.since_days || 1 }}" \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }} \
+            | tee run.log
+
+      - name: Publier le journal du run
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: log-${{ github.run_id }}
+          path: run.log
+          retention-days: 14

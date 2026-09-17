@@ -1,0 +1,25 @@
+{
+  "count": 2,
+  "results": [
+    {
+      "id": "4123456789",
+      "title": "Stage Ingénieur FPGA / VHDL (H/F)",
+      "description": "Stage de fin d'études de 6 mois : conception de blocs IP sur FPGA Xilinx, validation VHDL, traitement du signal.",
+      "created": "2026-09-14T08:00:00Z",
+      "redirect_url": "https://www.adzuna.fr/details/4123456789",
+      "company": { "display_name": "NanoSat" },
+      "location": { "display_name": "Toulouse, Haute-Garonne", "area": ["France", "Occitanie"] },
+      "contract_type": "contract",
+      "contract_time": "full_time"
+    },
+    {
+      "id": "4987654321",
+      "title": "Stage - Ingénieur systèmes embarqués drone (H/F)",
+      "description": "Développement firmware drone, STM32.",
+      "created": "2026-09-14T09:30:00Z",
+      "redirect_url": "https://www.adzuna.fr/details/4987654321",
+      "company": { "display_name": "ACME Drones" },
+      "location": { "display_name": "Palaiseau, Essonne" }
+    }
+  ]
+}
